@@ -317,31 +317,8 @@ body {
 .f-box h3::before { content: ''; width: 4px; height: 14px; background: #fff; border-radius: 4px; }
 .f-box iframe { width: 100%; border: none; border-radius: 10px; background: #fff; }
 .f-rac { height: 501px; }
-.f-mail { height: 602px; }
-
-.auth-success-box {
-  background: rgba(20, 20, 25, 0.8); border: 1px solid var(--border);
-  padding: 30px; border-radius: 16px; display: inline-block;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.5); text-align: center; margin-bottom: 30px;
-}
-.auth-success-box h3 { margin: 0 0 8px 0; font-size: 20px; color: #fff; font-weight: 600; }
-.auth-success-box p { margin: 0 0 20px 0; color: #aaa; font-size: 14px; }
-
-.verify-manual-btn {
-  background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);
-  padding: 10px 20px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: 0.3s;
-  margin-top: 15px; width: 100%;
-}
-.verify-manual-btn:hover { background: #fff; color: #000; }
-
-.settings-box {
-  background:var(--glass); border:1px solid var(--border); padding:30px; border-radius:24px;
-  backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px);
-}
-
-.swatch-btn {
-  width: 50px; height: 50px; border-radius: 14px; cursor: pointer;
-  border: 2px solid rgba(255,255,255,0.1); transition: 0.2s;
+.f-mail { height: 
+    border: 2px solid rgba(255,255,255,0.1); transition: 0.2s;
 }
 .swatch-btn:hover { transform: scale(1.1); }
 .swatch-btn.active { transform: scale(1.15); border-color: #fff; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
@@ -782,3 +759,203 @@ body {
     <div class="shoulder-btn" id="btn-rt">R2</div><div class="shoulder-btn" id="btn-rb">R1</div>
   </div>
 </div>
+<div id="modal-ui">
+  <img src="" class="m-bg" id="mdl-bg">
+  <div class="m-close"><div class="m-close-btn" onclick="clsMdl()">×</div></div>
+  <div class="m-grid">
+    <div class="m-l">
+      <img src="" id="mdl-post">
+      <button class="m-play" onclick="try2launch()">Play Now</button>
+      <div class="m-stats"><div class="m-rw"><small>Total Playtime</small><span id="mdl-tm">0m</span></div></div>
+    </div>
+    <div class="m-r">
+      <h1 class="m-t" id="mdl-t"></h1>
+      <div class="m-desc" id="mdl-dc"></div>
+      <div class="m-tgs" id="mdl-tg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:9000000;">
+  <div id="bS" style="position:absolute; inset:0; background:#000; z-index:90002; display:flex; justify-content:center; align-items:center; color:#fff;">
+    <h2 id="bS-t">Connecting to Server...</h2>
+  </div>
+  <iframe id="gF" allow="autoplay;fullscreen;pointer-lock;gamepad" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
+<script src="./gamelayout.js"></script>
+<script>
+// --- CORE DATA & STORAGE ---
+let lsDB = JSON.parse(localStorage.getItem('singularity_store_v10') || '{}');
+function sLS() { localStorage.setItem('singularity_store_v10', JSON.stringify(lsDB)); }
+let cxG = null; let isAuth = localStorage.getItem('singularity_authed') === 'true';
+
+// --- AUTH LOGIC ---
+function openAuthTray() {
+    document.getElementById('frame-area').classList.add('show');
+    document.getElementById('rac-frame').src = "https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en";
+}
+function markAsLoggedIn() {
+    isAuth = true; localStorage.setItem('singularity_authed', 'true');
+    document.getElementById('auth-success').style.display = 'block';
+    document.getElementById('login-trigger').style.display = 'none';
+    document.getElementById('frame-area').classList.remove('show');
+}
+
+// --- NAVIGATION ---
+function chgTab(v) {
+  document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-view').forEach(s => s.classList.remove('active'));
+  document.getElementById('b-' + v).classList.add('active');
+  document.getElementById('v-' + v).classList.add('active');
+}
+
+// --- GAME HANDLERS ---
+function opMdl(id) {
+    cxG = G_DATA.find(x => x.id === id);
+    if (!cxG) return;
+    document.getElementById('mdl-bg').src = cxG.bg;
+    document.getElementById('mdl-post').src = cxG.img;
+    document.getElementById('mdl-t').innerText = cxG.n;
+    document.getElementById('mdl-dc').innerText = cxG.desc;
+    document.getElementById('mdl-tm').innerText = (lsDB[id]?.t || 0) + "m";
+    document.getElementById('modal-ui').style.display = 'block';
+    setTimeout(() => document.getElementById('modal-ui').style.opacity = '1', 10);
+}
+function clsMdl() { document.getElementById('modal-ui').style.opacity = '0'; setTimeout(() => document.getElementById('modal-ui').style.display = 'none', 400); }
+
+function try2launch() {
+    if(!isAuth) { alert("Please login in Tutorial tab first!"); chgTab('tut'); clsMdl(); return; }
+    const layer = document.getElementById('game-layer');
+    const loader = document.getElementById('bS');
+    const frame = document.getElementById('gF');
+    
+    layer.style.display = 'block';
+    loader.style.display = 'flex';
+    frame.src = cxG.url || cxG.path;
+    document.getElementById('n-game-title').innerText = cxG.n;
+    document.getElementById('n-game').style.display = 'flex';
+    
+    setTimeout(() => { loader.style.display = 'none'; }, 4000);
+    clsMdl();
+}
+function clsGm() {
+    document.getElementById('gF').src = "";
+    document.getElementById('game-layer').style.display = 'none';
+    document.getElementById('n-game').style.display = 'none';
+}
+function tglV(v) { if(v==='h') clsGm(); }
+
+// --- JOYSTICK BRAIN (FIXED) ---
+let joyActive = false;
+let joyData = { x: 0, y: 0 };
+let mobileControlsActive = false;
+let activeKeys = new Set();
+
+function toggleMobileControls() {
+    mobileControlsActive = !mobileControlsActive;
+    document.getElementById('mobile-controls').classList.toggle('active');
+}
+
+function setupJoystick() {
+    const zone = document.getElementById('joystick-zone');
+    const knob = document.getElementById('joystick-knob');
+    if(!zone) return;
+
+    const handleMove = (clientX, clientY) => {
+        const rect = zone.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const maxDist = rect.width / 2;
+        let dx = clientX - centerX;
+        let dy = clientY - centerY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > maxDist) { dx *= maxDist / dist; dy *= maxDist / dist; }
+        knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        joyData.x = dx / maxDist;
+        joyData.y = dy / maxDist;
+    };
+
+    zone.addEventListener('touchstart', (e) => { e.preventDefault(); joyActive = true; handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchmove', (e) => { e.preventDefault(); if(joyActive) handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchend', () => { joyActive = false; knob.style.transform = 'translate(-50%, -50%)'; joyData = {x:0, y:0}; });
+}
+
+// Controller Polling Brain
+function processInput() {
+    if (mobileControlsActive) {
+        const t = 0.3; // threshold
+        const check = (key, condition) => {
+            if (condition && !activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+                activeKeys.add(key);
+            } else if (!condition && activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keyup', { key: key, bubbles: true }));
+                activeKeys.delete(key);
+            }
+        };
+        check('ArrowUp', joyData.y < -t);
+        check('ArrowDown', joyData.y > t);
+        check('ArrowLeft', joyData.x < -t);
+        check('ArrowRight', joyData.x > t);
+    }
+    requestAnimationFrame(processInput);
+}
+
+// Button Setup
+function setupFaceButtons() {
+    const map = {'btn-a':'Enter','btn-b':'Escape','btn-x':'x','btn-y':'y','dpad-up':'ArrowUp','dpad-down':'ArrowDown','dpad-left':'ArrowLeft','dpad-right':'ArrowRight'};
+    Object.keys(map).forEach(id => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:map[id]})); });
+        el.addEventListener('touchend', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup',{key:map[id]})); });
+    });
+}
+
+// --- PARTICLE SYSTEM (THE FULL LOGIC) ---
+let pC, pCtx, pArr = [], pType = 'none';
+function rSz() { pC = document.getElementById('bg-particles'); if(!pC) return; pCtx = pC.getContext('2d'); pC.width = window.innerWidth; pC.height = window.innerHeight; iP(); }
+function iP() {
+    pArr = []; if(pType==='none') return;
+    for(let i=0; i<60; i++) pArr.push({
+        x: Math.random()*pC.width, y: Math.random()*pC.height,
+        v: Math.random()*0.5+0.1, r: Math.random()*2+1,
+        o: Math.random(), char: String.fromCharCode(0x30A0 + Math.random() * 96)
+    });
+}
+function aP() {
+    if(!pCtx) return requestAnimationFrame(aP);
+    pCtx.clearRect(0,0,pC.width,pC.height);
+    if(pType !== 'none') {
+        pArr.forEach(p => {
+            pCtx.fillStyle = "rgba(255,255,255,0.4)";
+            if(pType==='matrix') { pCtx.fillStyle="#0f0"; pCtx.fillText(p.char, p.x, p.y); }
+            else { pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); pCtx.fill(); }
+            p.y += p.v; if(p.y > pC.height) p.y = -10;
+        });
+    }
+    requestAnimationFrame(aP);
+}
+
+// --- INIT ---
+window.onload = () => {
+    setTimeout(() => { document.getElementById('new-boot').style.opacity = '0'; }, 3000);
+    rSz(); aP(); setupJoystick(); processInput(); setupFaceButtons();
+    let check = setInterval(() => {
+        if(typeof G_DATA !== 'undefined') {
+            clearInterval(check);
+            const lib = document.getElementById('g-lib');
+            lib.innerHTML = G_DATA.map(g => `<div class="c-v" onclick="opMdl('${g.id}')"><img src="${g.img}"><div class="c-inf"><h3>${g.n}</h3></div></div>`).join('');
+            document.getElementById('hc-img').src = G_DATA[0].bg; document.getElementById('hc-title').innerText = G_DATA[0].n;
+        }
+    }, 100);
+    if(isAuth) markAsLoggedIn();
+};
+
+function setTheme(t) { document.documentElement.style.setProperty('--accent', t==='neon'?'#00d2ff':'#fff'); }
+function setParticles(t) { pType = t; iP(); }
+function toggleBGM() { alert("Audio Toggle: Not Muted"); }
+</script>
+</body>
+</html>
