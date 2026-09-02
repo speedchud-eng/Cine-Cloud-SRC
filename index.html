@@ -1077,6 +1077,7 @@ function rnLd() { // <-- THIS IS NOW CORRECT
     showToast('No game selected!');
     return;
   }
+   let tU = cxG.url || cxG.path;
   document.getElementById('n-game-title').innerText = cxG.n;
   document.getElementById('n-game').style.display = 'flex';
   let f = document.getElementById('gF'),
