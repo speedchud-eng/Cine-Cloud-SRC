@@ -1,159 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Singularity OS</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-:root { --bg: #050505; --glass: rgba(22, 22, 25, 0.6); --glass-hover: rgba(35, 35, 40, 0.8); --border: rgba(255, 255, 255, 0.08); --text: #f5f5f7; --muted: #888890; --accent: #ffffff; }
-body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; user-select: none; touch-action: pan-y; }
-::-webkit-scrollbar { width: 0; }
-.top-notch { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-top: none; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; padding: 8px 24px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-.top-notch img { width: 18px; }
-.top-notch span { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-#new-boot { position: fixed; inset: 0; background: #000; z-index: 9999999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.6s; }
-.fig-title { font-size: 44px; font-weight: 800; letter-spacing: 20px; animation: txtIn 1.5s forwards; }
-@keyframes txtIn { from { letter-spacing: 0; opacity: 0; filter: blur(10px); } to { letter-spacing: 20px; opacity: 1; filter: blur(0); } }
-#app-wrap { flex: 1; overflow-y: auto; padding: 60px 50px 180px 50px; }
-.tab-view { display: none; } .tab-view.active { display: block; }
-.sec-head { font-size: 22px; font-weight: 600; margin: 60px 0 25px; display: flex; align-items: center; gap: 12px; }
-.sec-head::before { content: ''; width: 4px; height: 18px; background: #fff; border-radius: 4px; }
-.hero-cont { width: 100%; height: 500px; border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; border: 1px solid var(--border); transition: 0.3s; }
-.h-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
-.h-over { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 60px; }
-.grid-h { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-.grid-v { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 25px; }
-.c-h, .c-v { position: relative; border-radius: 14px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); background: #080808; }
-.c-h { aspect-ratio: 16/9; } .c-v { aspect-ratio: 3/4; }
-.c-h img, .c-v img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
-.c-inf { position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
-.dock-wrap { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 15px; z-index: 1000; }
-.main-dock { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 80px; display: flex; padding: 10px 14px; }
-.d-btn { padding: 10px 26px; border-radius: 100px; color: var(--muted); font-size: 13px; cursor: pointer; transition: 0.3s; }
-.d-btn.active { color: #000; background: #fff; font-weight: 600; }
-.trk-widg { background: var(--glass); border: 1px solid var(--border); border-radius: 100px; height: 60px; padding: 6px; display: none; align-items: center; gap: 12px; }
-#modal-ui { position: fixed; inset: 0; background: var(--bg); z-index: 500; display: none; opacity: 0; transition: 0.4s; overflow-y: auto; }
-.m-grid { padding: 100px; display: flex; gap: 70px; position: relative; z-index: 2; }
-.m-l { width: 340px; flex-shrink: 0; } .m-l img { width: 100%; border-radius: 16px; }
-.m-play { width: 100%; background: #fff; padding: 20px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; margin-bottom: 20px; }
-.f-box { background: #080808; border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-.f-box iframe { width: 100%; border: none; height: 500px; border-radius: 8px; }
-#mobile-controls { position: fixed; bottom: 100px; left: 0; width: 100%; height: 220px; display: none; z-index: 1000001; }
-#mobile-controls.active { display: block; pointer-events: none; }
-#joystick-zone { position: absolute; bottom: 10px; left: 20px; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); pointer-events: auto; }
-#joystick-knob { position: absolute; width: 50px; height: 50px; border-radius: 50%; background: #fff; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-#face-buttons { position: absolute; bottom: 10px; right: 20px; width: 130px; height: 130px; pointer-events: auto; }
-.face-btn { position: absolute; width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
-.ps-triangle { top: 0; left: 42px; } .ps-circle { top: 42px; right: 0; } .ps-cross { bottom: 0; left: 42px; } .ps-square { top: 42px; left: 0; }
-#mobile-toggle-btn { position: fixed; bottom: 20px; right: 20px; z-index: 1000002; width: 56px; height: 56px; background: var(--glass); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 24px; }
-@media (max-width: 1024px) { #app-wrap { padding: 20px; } .m-grid { flex-direction: column; padding: 40px 20px; } .m-l { width: 100%; } .hero-cont { height: 250px; } }
-</style>
-</head>
-<body>
-<div style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 10px;">
-  <div class="top-notch" onclick="tglV('h')"><img src="https://freepngimg.com/convert-png/89656-icons-circle-computer-black-white-steam"><span>Singularity by C.S</span></div>
-  <div class="top-notch" id="n-game" style="display: none; background: rgba(255,255,255,0.15);"><span id="n-game-title">Game</span><span onclick="clsGm(event)" style="margin-left: 10px; color: #ff4d4d;">×</span></div>
-</div>
-<div id="new-boot"><div class="fig-title">SINGULARITY</div></div>
-<div id="app-wrap">
-  <div id="v-cine" class="tab-view active">
-    <div class="sec-head" style="margin-top:0;">Continue Playing</div>
-    <div class="hero-cont" id="hc-box"><img src="" id="hc-img" class="h-img"><div class="h-over"><h1>Welcome</h1><span id="hc-dev">Cloud Gaming System</span></div></div>
-    <div class="sec-head">Poppy Playtime Universe</div><div class="grid-h" id="g-poppy"></div>
-    <div class="sec-head">Racing & Driving</div><div class="grid-h" id="g-race"></div>
-  </div>
-  <div id="v-lib" class="tab-view"><div class="sec-head" style="margin-top:0;">Library</div><div class="grid-v" id="g-lib"></div></div>
-  <div id="v-tut" class="tab-view">
-    <div class="tut-cnt">
-      <h1>Setup Guide</h1><video controls style="width:100%; border-radius:12px;"><source src="Tutorial.mp4" type="video/mp4"></video><br><br>
-      <button class="show-login-btn" id="login-trigger" onclick="openAuthTray()">Log in to play</button>
-      <div id="frame-area" style="display:none; flex-direction:column; gap:20px;">
-        <div class="f-box"><h3>Link Raccoon Account</h3><a href="https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en" target="_blank" class="show-login-btn" style="background:#fff; color:#000;">Open Login in New Tab</a><iframe id="rac-frame"></iframe><button class="verify-manual-btn" onclick="markAsLoggedIn()">I have logged in</button></div>
-        <div class="f-box"><h3>Temp Mail</h3><iframe src="https://tempmail.ing/"></iframe></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="dock-wrap">
-  <div class="main-dock">
-    <div class="d-btn active" id="b-cine" onclick="chgTab('cine')">Home</div>
-    <div class="d-btn" id="b-lib" onclick="chgTab('lib')">Library</div>
-    <div class="d-btn" id="b-tut" onclick="chgTab('tut')">Tutorial</div>
-  </div>
-  <div class="trk-widg" id="tk" onclick="tkAction()"><img src="" class="tw-img" id="tk-img"><div class="tw-txt"><small>Now Playing</small><strong id="tk-nm">...</strong></div></div>
-</div>
-<div id="mobile-toggle-btn" onclick="toggleMobileControls()">📱</div>
-<div id="mobile-controls">
-  <div id="joystick-zone"><div id="joystick-knob"></div></div>
-  <div id="face-buttons">
-    <div class="face-btn ps-triangle" id="btn-y">▲</div><div class="face-btn ps-circle" id="btn-b">●</div>
-    <div class="face-btn ps-cross" id="btn-a">✕</div><div class="face-btn ps-square" id="btn-x">■</div>
-  </div>
-</div>
 <div id="modal-ui">
+  <img src="" class="m-bg" id="mdl-bg">
   <div class="m-close"><div class="m-close-btn" onclick="clsMdl()">×</div></div>
   <div class="m-grid">
     <div class="m-l"><img src="" id="mdl-post"><button class="m-play" onclick="try2launch()">Play Now</button></div>
-    <div class="m-r"><h1 id="mdl-t"></h1><p id="mdl-dc"></p><div id="mdl-tg"></div></div>
+    <div class="m-r"><h1 class="m-t" id="mdl-t"></h1><div class="m-desc" id="mdl-dc"></div><div class="m-tgs" id="mdl-tg"></div></div>
   </div>
 </div>
-<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:900000;"><iframe id="gF" allow="autoplay;fullscreen;pointer-lock;gamepad" style="width:100%; height:100%; border:none;"></iframe></div>
+
+<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:900000;">
+  <div id="bS" style="position:absolute; inset:0; background:#000; z-index:90002; display:flex; justify-content:center; align-items:center; color:#fff;">
+    <h2 id="bS-t">Connecting to Cloud Server...</h2>
+  </div>
+  <iframe id="gF" allow="autoplay;fullscreen;pointer-lock;gamepad" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
 <script src="./gamelayout.js"></script>
 <script>
-let lsDB = JSON.parse(localStorage.getItem('singularity_v10') || '{}'), cxG = null, isAuth = false;
-function chgTab(v) { document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-view').forEach(s => s.classList.remove('active')); document.getElementById('b-'+v).classList.add('active'); document.getElementById('v-'+v).classList.add('active'); }
-function openAuthTray() { document.getElementById('frame-area').style.display = 'flex'; document.getElementById('rac-frame').src = "https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en"; }
-function markAsLoggedIn() { isAuth = true; document.getElementById('frame-area').style.display = 'none'; document.getElementById('login-trigger').innerText = "Account Connected"; }
-function opMdl(id) { cxG = G_DATA.find(x => x.id === id); document.getElementById('mdl-post').src = cxG.img; document.getElementById('mdl-t').innerText = cxG.n; document.getElementById('mdl-dc').innerText = cxG.desc; document.getElementById('modal-ui').style.display = 'block'; setTimeout(() => document.getElementById('modal-ui').style.opacity = '1', 10); }
+// --- ORIGINAL CORE SYSTEMS ---
+let lsDB = JSON.parse(localStorage.getItem('singularity_store_v10') || '{}');
+function sLS() { localStorage.setItem('singularity_store_v10', JSON.stringify(lsDB)); }
+let cxG = null; let isAuth = localStorage.getItem('singularity_authed') === 'true';
+
+// --- AUTH ---
+function openAuthTray() {
+    document.getElementById('frame-area').classList.add('show');
+    document.getElementById('rac-frame').src = "https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en";
+}
+function markAsLoggedIn() {
+    isAuth = true; localStorage.setItem('singularity_authed', 'true');
+    document.getElementById('auth-success').style.display = 'block';
+    document.getElementById('login-trigger').style.display = 'none';
+    document.getElementById('frame-area').classList.remove('show');
+}
+
+// --- TAB SYSTEM ---
+function chgTab(v) {
+  document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-view').forEach(s => s.classList.remove('active'));
+  document.getElementById('b-' + v).classList.add('active');
+  document.getElementById('v-' + v).classList.add('active');
+}
+
+// --- GAME LOGIC ---
+function opMdl(id) {
+    cxG = G_DATA.find(x => x.id === id);
+    document.getElementById('mdl-bg').src = cxG.bg;
+    document.getElementById('mdl-post').src = cxG.img;
+    document.getElementById('mdl-t').innerText = cxG.n;
+    document.getElementById('mdl-dc').innerText = cxG.desc;
+    document.getElementById('modal-ui').style.display = 'block';
+    setTimeout(() => document.getElementById('modal-ui').style.opacity = '1', 10);
+}
 function clsMdl() { document.getElementById('modal-ui').style.opacity = '0'; setTimeout(() => document.getElementById('modal-ui').style.display = 'none', 400); }
-function try2launch() { if(!isAuth) { alert("Login in Tutorial first!"); chgTab('tut'); clsMdl(); return; } document.getElementById('game-layer').style.display = 'block'; document.getElementById('gF').src = cxG.url || cxG.path; document.getElementById('n-game').style.display = 'flex'; document.getElementById('n-game-title').innerText = cxG.n; clsMdl(); }
-function clsGm() { document.getElementById('gF').src = ""; document.getElementById('game-layer').style.display = 'none'; document.getElementById('n-game').style.display = 'none'; }
+
+function try2launch() {
+    if(!isAuth) { alert("Please login in Tutorial tab first!"); chgTab('tut'); clsMdl(); return; }
+    document.getElementById('game-layer').style.display = 'block';
+    document.getElementById('bS').style.display = 'flex';
+    document.getElementById('gF').src = cxG.url || cxG.path;
+    document.getElementById('n-game-title').innerText = cxG.n;
+    document.getElementById('n-game').style.display = 'flex';
+    setTimeout(() => { document.getElementById('bS').style.display = 'none'; }, 4000);
+    clsMdl();
+}
+
+function clsGm() {
+    document.getElementById('gF').src = "";
+    document.getElementById('game-layer').style.display = 'none';
+    document.getElementById('n-game').style.display = 'none';
+}
+
 function tglV(v) { if(v==='h') clsGm(); }
-// Joystick
-let joystickActive = false, joyData = {x:0,y:0}, mobileActive = false, activeKeys = new Set();
-function toggleMobileControls() { mobileActive = !mobileActive; document.getElementById('mobile-controls').classList.toggle('active'); }
-function setupJoy() {
-    const zone = document.getElementById('joystick-zone'), knob = document.getElementById('joystick-knob');
-    const move = (cx, cy) => {
-        const r = zone.getBoundingClientRect(), mx = r.width/2, dx = cx-(r.left+mx), dy = cy-(r.top+mx), dist = Math.sqrt(dx*dx+dy*dy);
-        const lim = mx-25, factor = Math.min(dist, lim)/dist || 0;
-        const finalX = dx*factor, finalY = dy*factor;
-        knob.style.transform = `translate(calc(-50% + ${finalX}px), calc(-50% + ${finalY}px))`;
-        joyData = {x: finalX/lim, y: finalY/lim};
+
+// --- JOYSTICK LOGIC (FIXED) ---
+let joyActive = false;
+let joyData = { x: 0, y: 0 };
+let mobileControlsActive = false;
+let activeKeys = new Set();
+
+function toggleMobileControls() {
+    mobileControlsActive = !mobileControlsActive;
+    document.getElementById('mobile-controls').classList.toggle('active');
+    document.getElementById('mobile-toggle-btn').classList.toggle('active');
+}
+
+function setupJoystick() {
+    const zone = document.getElementById('joystick-zone');
+    const knob = document.getElementById('joystick-knob');
+    if(!zone) return;
+
+    const handleMove = (clientX, clientY) => {
+        const rect = zone.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const maxDist = rect.width / 2;
+        let dx = clientX - centerX;
+        let dy = clientY - centerY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > maxDist) { dx *= maxDist / dist; dy *= maxDist / dist; }
+        knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        joyData.x = dx / maxDist;
+        joyData.y = dy / maxDist;
     };
-    zone.addEventListener('touchstart', e => { e.preventDefault(); joystickActive = true; move(e.touches[0].clientX, e.touches[0].clientY); });
-    zone.addEventListener('touchmove', e => { e.preventDefault(); if(joystickActive) move(e.touches[0].clientX, e.touches[0].clientY); });
-    zone.addEventListener('touchend', () => { joystickActive = false; knob.style.transform = 'translate(-50%,-50%)'; joyData = {x:0,y:0}; });
+
+    zone.addEventListener('touchstart', (e) => { e.preventDefault(); joyActive = true; handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchmove', (e) => { e.preventDefault(); if(joyActive) handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchend', () => { joyActive = false; knob.style.transform = 'translate(-50%, -50%)'; joyData = {x:0, y:0}; });
 }
-function loop() {
-    if(mobileActive) {
-        const t = 0.3, send = (k, c) => {
-            if(c && !activeKeys.has(k)) { document.dispatchEvent(new KeyboardEvent('keydown', {key:k, bubbles:true})); activeKeys.add(k); }
-            else if(!c && activeKeys.has(k)) { document.dispatchEvent(new KeyboardEvent('keyup', {key:k, bubbles:true})); activeKeys.delete(k); }
+
+// The "Brain" Loop for Joystick
+function gameLoop() {
+    if (mobileControlsActive) {
+        const t = 0.3; // Threshold
+        const checkKey = (key, condition) => {
+            if (condition && !activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+                activeKeys.add(key);
+            } else if (!condition && activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keyup', { key: key, bubbles: true }));
+                activeKeys.delete(key);
+            }
         };
-        send('ArrowUp', joyData.y < -t); send('ArrowDown', joyData.y > t); send('ArrowLeft', joyData.x < -t); send('ArrowRight', joyData.x > t);
+        checkKey('ArrowUp', joyData.y < -t);
+        checkKey('ArrowDown', joyData.y > t);
+        checkKey('ArrowLeft', joyData.x < -t);
+        checkKey('ArrowRight', joyData.x > t);
     }
-    requestAnimationFrame(loop);
+    requestAnimationFrame(gameLoop);
 }
-function setupBtns() {
+
+// Buttons
+function setupButtons() {
     const map = {'btn-a':'Enter', 'btn-b':'Escape', 'btn-x':'x', 'btn-y':'y'};
     Object.keys(map).forEach(id => {
         const el = document.getElementById(id);
-        el.addEventListener('touchstart', e => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown',{key:map[id]})); });
-        el.addEventListener('touchend', e => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup',{key:map[id]})); });
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown', {key: map[id]})); });
+        el.addEventListener('touchend', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup', {key: map[id]})); });
     });
 }
+
+// --- PARTICLE SYSTEM ---
+let pC, pCtx, pArr = [];
+function rSz() { pC = document.getElementById('bg-particles'); pCtx = pC.getContext('2d'); pC.width = window.innerWidth; pC.height = window.innerHeight; iP(); }
+function iP() { pArr = []; for(let i=0; i<50; i++) pArr.push({x:Math.random()*pC.width, y:Math.random()*pC.height, v:Math.random()*0.5+0.2}); }
+function aP() { pCtx.clearRect(0,0,pC.width,pC.height); pCtx.fillStyle = "rgba(255,255,255,0.3)"; pArr.forEach(p => { p.y -= p.v; if(p.y < 0) p.y = pC.height; pCtx.beginPath(); pCtx.arc(p.x, p.y, 1, 0, Math.PI*2); pCtx.fill(); }); requestAnimationFrame(aP); }
+
+// --- INIT ---
 window.onload = () => {
-    setTimeout(() => document.getElementById('new-boot').style.opacity = '0', 2000);
-    setupJoy(); setupBtns(); loop();
+    setTimeout(() => { document.getElementById('new-boot').style.opacity = '0'; }, 3000);
+    rSz(); aP(); setupJoystick(); setupButtons(); gameLoop();
     let check = setInterval(() => {
         if(typeof G_DATA !== 'undefined') {
             clearInterval(check);
             document.getElementById('g-lib').innerHTML = G_DATA.map(g => `<div class="c-v" onclick="opMdl('${g.id}')"><img src="${g.img}"><div class="c-inf"><h3>${g.n}</h3></div></div>`).join('');
-            document.getElementById('hc-img').src = G_DATA[0].bg; document.getElementById('hc-box').onclick = () => opMdl(G_DATA[0].id);
+            document.getElementById('hc-img').src = G_DATA[0].bg; document.getElementById('hc-title').innerText = G_DATA[0].n;
         }
     }, 100);
+    if(isAuth) markAsLoggedIn();
 };
 </script>
 </body>
