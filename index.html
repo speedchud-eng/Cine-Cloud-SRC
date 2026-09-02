@@ -1359,6 +1359,14 @@ function rnLd() {
     trStart(cxG.id);
     return;
   }
+  function try2launch() {
+  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
+  if (gmWin && !gmWin.closed && !isMobile) { 
+    showPopup('p-sess-block'); 
+    return; 
+  }
+  rnLd();
+}
   document.getElementById('n-game-title').innerText = cxG.n; document.getElementById('n-game').style.display = 'flex';
   let f = document.getElementById('gF'), s = document.getElementById('bS'), bt = document.getElementById('bS-t'), lo = document.getElementById('lO');
   if (bt) bt.innerText = 'Loading ' + cxG.n + '...'; s.style.display = 'flex'; s.style.opacity = '1'; lo.style.display = 'none'; tglV('g');
