@@ -888,8 +888,6 @@ function clsA2hs() {
 }
 
 // ---------- MOBILE CONTROLS TOGGLE ----------
-let mobileControlsActive = false;
-
 function toggleMobileControls() {
   mobileControlsActive = !mobileControlsActive;
   const controls = document.getElementById('mobile-controls');
@@ -906,7 +904,10 @@ function toggleMobileControls() {
     btn.textContent = '🎮';
     localStorage.removeItem('singularity_mobile_controls');
     showToast('Xbox Controls OFF');
-    function setupMobileButtons() {
+  }
+}
+  // ---------- MOBILE BUTTON SETUP ----------
+function setupMobileButtons() {
   const buttons = {
     'dpad-up': 'ArrowUp',
     'dpad-down': 'ArrowDown',
@@ -953,7 +954,8 @@ function toggleMobileControls() {
 
 // Call setup when DOM loads
 document.addEventListener('DOMContentLoaded', setupMobileButtons);
-    } 
+
+    
 // ---------- JOYSTICK LOGIC ----------
 let joystickActive = false;
 let joystickData = { x: 0, y: 0 };
