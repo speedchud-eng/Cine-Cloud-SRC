@@ -953,10 +953,6 @@ function setupMobileButtons() {
     });
   });
 }
-
-// Call setup when DOM loads
-document.addEventListener('DOMContentLoaded', setupMobileButtons);
-
 // ---------- POPUP FUNCTIONS ----------
 function showPopup(id) {
   let el = document.getElementById(id);
@@ -970,7 +966,96 @@ function hidePopup(id) {
   if (!el) return;
   el.classList.remove('show');
   setTimeout(() => el.style.display = 'none', 300);
-}    
+}  // ---------- SINGLE DOM CONTENT LOADED HANDLER ----------
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Mobile controls setup
+  setupMobileButtons();
+
+  // 2. Joystick setup (move this from the other listener)
+  const zone = document.getElementById('joystick-zone');
+  const knob = document.getElementById('joystick-knob');
+  if (zone && knob) {
+    // ... (copy the entire joystick code from your other listener here)
+  }
+
+  // 3. Main app initialization
+  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
+  let isStandAlone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || document.referrer.includes('android-app://');
+  
+  if (isMobile) {
+    setTimeout(() => { showToast("Welcome to Singularity - Mobile"); }, 2500);
+    if (!localStorage.getItem('singularity_a2hs') && !isStandAlone) {
+      setTimeout(() => {
+        let el = document.getElementById('m-a2hs');
+        if (el) el.style.bottom = '0px';
+      }, 5000);
+    }
+    if (localStorage.getItem('singularity_mobile_controls')) {
+      setTimeout(() => {
+        toggleMobileControls();
+      }, 1000);
+    }
+  }
+
+  let b = document.getElementById('new-boot');
+  setTimeout(() => {
+    b.style.opacity = '0';
+    setTimeout(() => { b.style.display = 'none'; }, 800);
+  }, 3000);
+
+  let t = localStorage.getItem('singularity_theme') || 'dark'; setTheme(t);
+  let p = localStorage.getItem('singularity_particles') || 'none'; setParticles(p);
+  
+  let uP = new URLSearchParams(window.location.search);
+  let gParam = uP.get('game'); let embParam = uP.get('embed');
+  
+  if (embParam) {
+    let s = document.createElement('script');
+    s.src = './gamelayout.js';
+    document.head.appendChild(s);
+    let chI = setInterval(() => {
+      if (typeof G_DATA !== 'undefined') {
+        clearInterval(chI);
+        let f = G_DATA.find(x => x.id === gParam);
+        if (f) {
+          document.body.innerHTML = '<iframe src="' + (f.url || f.path) + '" style="position:fixed;inset:0;width:100%;height:100%;border:none;z-index:99999999;"></iframe>';
+        }
+      }
+    }, 50);
+    return;
+  }
+  
+  if (!localStorage.getItem('singularity_legal_accepted')) showPopup('p-legal-block');
+
+  let checkAttempts = 0;
+  let checkG = setInterval(() => {
+    if (typeof G_DATA !== 'undefined' && Array.isArray(G_DATA)) {
+      clearInterval(checkG);
+      let ef = document.getElementById('error-fallback'); if (ef) ef.style.display = 'none';
+      dodeLayout();
+      if (gParam) {
+        let g = G_DATA.find(x => x.id === gParam);
+        if (g) {
+          cxG = g;
+          opMdl(g.id); setTimeout(try2launch, 500);
+        }
+      }
+    } else {
+      checkAttempts++;
+      if (checkAttempts === 20) {
+        let s = document.createElement('script');
+        s.src = './gamelayout.js';
+        document.head.appendChild(s);
+      }
+      if (checkAttempts > 100) {
+        clearInterval(checkG);
+        let ef = document.getElementById('error-fallback');
+        if (ef) ef.style.display = 'block';
+      }
+    }
+  }, 50);
+  rSz(); aP();
+});  
   // ---------- GAME LAUNCH FUNCTIONS ----------
 let gmWin = null;
 let gmId = null;
@@ -1052,80 +1137,6 @@ function trStart(id) {
 let joystickActive = false;
 let joystickData = { x: 0, y: 0 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  const zone = document.getElementById('joystick-zone');
-  const knob = document.getElementById('joystick-knob');
-  if (!zone || !knob) return;
-
-  const zoneRect = zone.getBoundingClientRect();
-  const centerX = zoneRect.width / 2;
-  const centerY = zoneRect.height / 2;
-  const maxDist = zoneRect.width / 2 - knob.offsetWidth / 2;
-
-  function handleJoystick(clientX, clientY) {
-    const rect = zone.getBoundingClientRect();
-    let dx = clientX - rect.left - centerX;
-    let dy = clientY - rect.top - centerY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist > maxDist) {
-      dx = (dx / dist) * maxDist;
-      dy = (dy / dist) * maxDist;
-    }
-    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    joystickData.x = dx / maxDist;
-    joystickData.y = dy / maxDist;
-  }
-
-  function resetJoystick() {
-    knob.style.transform = 'translate(-50%, -50%)';
-    joystickData.x = 0;
-    joystickData.y = 0;
-    joystickActive = false;
-  }
-
-  zone.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    joystickActive = true;
-    const touch = e.touches[0];
-    handleJoystick(touch.clientX, touch.clientY);
-  });
-
-  zone.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (!joystickActive) return;
-    const touch = e.touches[0];
-    handleJoystick(touch.clientX, touch.clientY);
-  });
-
-  zone.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    resetJoystick();
-  });
-
-  zone.addEventListener('touchcancel', (e) => {
-    e.preventDefault();
-    resetJoystick();
-  });
-
-  // Mouse support for desktop testing
-  let mouseDown = false;
-  zone.addEventListener('mousedown', (e) => {
-    mouseDown = true;
-    joystickActive = true;
-    handleJoystick(e.clientX, e.clientY);
-  });
-  document.addEventListener('mousemove', (e) => {
-    if (!mouseDown) return;
-    handleJoystick(e.clientX, e.clientY);
-  });
-  document.addEventListener('mouseup', () => {
-    if (mouseDown) {
-      mouseDown = false;
-      resetJoystick();
-    }
-  });
-});
-
 // ---------- DOM CONTENT LOADED ----------
 window.addEventListener('DOMContentLoaded', () => {
   let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
@@ -1205,6 +1216,78 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, 50);
   rSz(); aP();
+
+    const zone = document.getElementById('joystick-zone');
+  const knob = document.getElementById('joystick-knob');
+  if (!zone || !knob) return;
+
+  const zoneRect = zone.getBoundingClientRect();
+  const centerX = zoneRect.width / 2;
+  const centerY = zoneRect.height / 2;
+  const maxDist = zoneRect.width / 2 - knob.offsetWidth / 2;
+
+  function handleJoystick(clientX, clientY) {
+    const rect = zone.getBoundingClientRect();
+    let dx = clientX - rect.left - centerX;
+    let dy = clientY - rect.top - centerY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist > maxDist) {
+      dx = (dx / dist) * maxDist;
+      dy = (dy / dist) * maxDist;
+    }
+    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    joystickData.x = dx / maxDist;
+    joystickData.y = dy / maxDist;
+  }
+
+  function resetJoystick() {
+    knob.style.transform = 'translate(-50%, -50%)';
+    joystickData.x = 0;
+    joystickData.y = 0;
+    joystickActive = false;
+  }
+
+  zone.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    joystickActive = true;
+    const touch = e.touches[0];
+    handleJoystick(touch.clientX, touch.clientY);
+  });
+
+  zone.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!joystickActive) return;
+    const touch = e.touches[0];
+    handleJoystick(touch.clientX, touch.clientY);
+  });
+
+  zone.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    resetJoystick();
+  });
+
+  zone.addEventListener('touchcancel', (e) => {
+    e.preventDefault();
+    resetJoystick();
+  });
+
+  // Mouse support for desktop testing
+  let mouseDown = false;
+  zone.addEventListener('mousedown', (e) => {
+    mouseDown = true;
+    joystickActive = true;
+    handleJoystick(e.clientX, e.clientY);
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!mouseDown) return;
+    handleJoystick(e.clientX, e.clientY);
+  });
+  document.addEventListener('mouseup', () => {
+    if (mouseDown) {
+      mouseDown = false;
+      resetJoystick();
+    }
+  });
 });
 
 let bgM = new Audio('backgroundmusic.mp3'); bgM.loop = true; let bgMuted = localStorage.getItem('bg_muted') === 'true'; let aInit = false;
