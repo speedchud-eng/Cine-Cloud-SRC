@@ -971,6 +971,83 @@ function hidePopup(id) {
   el.classList.remove('show');
   setTimeout(() => el.style.display = 'none', 300);
 }    
+  // ---------- GAME LAUNCH FUNCTIONS ----------
+let gmWin = null;
+let gmId = null;
+let gInt = null;
+let gSs = 0;
+
+function try2launch() {
+  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
+  if (gmWin && !gmWin.closed && !isMobile) { 
+    showPopup('p-sess-block'); 
+    return; 
+  }
+  rnLd();
+}
+
+function rnLd() {
+  if (!cxG) { showToast('No game selected!'); return; }
+  clsMdl(); 
+  let tU = cxG.url || cxG.path;
+  let isM = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
+  if (isM) {
+    showToast("Opening game...");
+    let nw = window.open(tU, '_blank');
+    gmWin = { closed: false, close: function() { if (nw) nw.close(); clsGm(); } };
+    trStart(cxG.id);
+    return;
+  }
+  document.getElementById('n-game-title').innerText = cxG.n; 
+  document.getElementById('n-game').style.display = 'flex';
+  let f = document.getElementById('gF'), s = document.getElementById('bS'), bt = document.getElementById('bS-t'), lo = document.getElementById('lO');
+  if (bt) bt.innerText = 'Loading ' + cxG.n + '...'; 
+  s.style.display = 'flex'; 
+  s.style.opacity = '1'; 
+  lo.style.display = 'none'; 
+  tglV('g');
+  gmWin = { closed: false, close: function() { clsGm(); } }; 
+  setTimeout(() => { 
+    f.src = tU; 
+    setTimeout(() => { 
+      if (s) { 
+        s.style.opacity = '0'; 
+        setTimeout(() => s.style.display = 'none', 1000); 
+      } 
+    }, 1500); 
+  }, 2500); 
+  trStart(cxG.id);
+}
+
+function trStart(id) {
+  if (gInt) clearInterval(gInt); 
+  gmId = id; 
+  if (!lsDB[id]) lsDB[id] = {t: 0, l: Date.now()}; 
+  lsDB[id].l = Date.now(); 
+  sLS(); 
+  gSs = lsDB[id].t; 
+  rfrTrk();
+  gInt = setInterval(() => { 
+    if (gmWin && !gmWin.closed) { 
+      gSs++; 
+      if (gSs % 5 === 0) { 
+        lsDB[id].t = gSs; 
+        lsDB[id].l = Date.now(); 
+        sLS(); 
+      } 
+    } else { 
+      clearInterval(gInt); 
+      lsDB[id].t = gSs; 
+      lsDB[id].l = Date.now(); 
+      sLS(); 
+      gmWin = null; 
+      gmId = null; 
+      gInt = null; 
+      rfrTrk(); 
+      dodeLayout(); 
+    } 
+  }, 1000);
+}
 // ---------- JOYSTICK LOGIC ----------
 let joystickActive = false;
 let joystickData = { x: 0, y: 0 };
