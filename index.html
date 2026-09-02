@@ -897,15 +897,62 @@ function toggleMobileControls() {
   if (mobileControlsActive) {
     controls.classList.add('active');
     btn.classList.add('active');
-    btn.textContent = '📱';
+    btn.textContent = '🎮';
     localStorage.setItem('singularity_mobile_controls', '1');
-    showToast('Mobile controls ON');
+    showToast('Xbox Controls ON');
   } else {
     controls.classList.remove('active');
     btn.classList.remove('active');
-    btn.textContent = '📱';
+    btn.textContent = '🎮';
     localStorage.removeItem('singularity_mobile_controls');
-    showToast('Mobile controls OFF');
+    showToast('Xbox Controls OFF');
+    function setupMobileButtons() {
+  const buttons = {
+    'dpad-up': 'ArrowUp',
+    'dpad-down': 'ArrowDown',
+    'dpad-left': 'ArrowLeft',
+    'dpad-right': 'ArrowRight',
+    'btn-a': 'Enter',
+    'btn-b': 'Escape',
+    'btn-x': 'x',
+    'btn-y': 'y',
+    'btn-lb': 'q',
+    'btn-rb': 'e',
+    'btn-lt': 'ShiftLeft',
+    'btn-rt': 'Space',
+    'btn-start': 'Enter',
+    'btn-select': 'Escape'
+  };
+
+  Object.keys(buttons).forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const key = buttons[id];
+
+    el.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const event = new KeyboardEvent('keydown', { key: key, bubbles: true });
+      document.dispatchEvent(event);
+      el.style.transform = 'scale(0.85)';
+    });
+
+    el.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      const event = new KeyboardEvent('keyup', { key: key, bubbles: true });
+      document.dispatchEvent(event);
+      el.style.transform = 'scale(1)';
+    });
+
+    el.addEventListener('touchcancel', (e) => {
+      const event = new KeyboardEvent('keyup', { key: key, bubbles: true });
+      document.dispatchEvent(event);
+      el.style.transform = 'scale(1)';
+    });
+  });
+}
+
+// Call setup when DOM loads
+document.addEventListener('DOMContentLoaded', setupMobileButtons);
   }
 }
 
