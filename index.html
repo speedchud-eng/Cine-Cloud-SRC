@@ -888,6 +888,8 @@ function clsA2hs() {
 }
 
 // ---------- MOBILE CONTROLS TOGGLE ----------
+let mobileControlsActive = false;
+  
 function toggleMobileControls() {
   mobileControlsActive = !mobileControlsActive;
   const controls = document.getElementById('mobile-controls');
@@ -955,7 +957,20 @@ function setupMobileButtons() {
 // Call setup when DOM loads
 document.addEventListener('DOMContentLoaded', setupMobileButtons);
 
-    
+// ---------- POPUP FUNCTIONS ----------
+function showPopup(id) {
+  let el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(() => el.classList.add('show'), 10);
+}
+
+function hidePopup(id) {
+  let el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('show');
+  setTimeout(() => el.style.display = 'none', 300);
+}    
 // ---------- JOYSTICK LOGIC ----------
 let joystickActive = false;
 let joystickData = { x: 0, y: 0 };
@@ -1264,7 +1279,12 @@ function forceLoginReopen() {
 let frC = 0; document.getElementById('rac-frame').addEventListener('load', () => { frC++; if (frC >= 2 && !devMode) markAsLoggedIn(); });
 window.addEventListener('keydown', (e) => { if (e.altKey && e.key.toLowerCase() === 's') { devMode = true; frC = 0; forceLoginReopen(); } });
 
-function showPopup(id) { let el = document.getElementById(id); el.style.display = 'flex'; setTimeout(() => el.classList.add('show'), 10); }
+function showPopup(id) {
+  let el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(() => el.classList.add('show'), 10);
+}
 function hidePopup(id) { let el = document.getElementById(id); el.classList.remove('show'); setTimeout(() => el.style.display = 'none', 300); }
 function closePopupClick(e) { if (e.target.classList.contains('popup-wrap') && e.target.id !== 'p-legal-block') hidePopup(e.target.id); }
 function goToTutorial() { hidePopup('p-tut-block'); clsMdl(); chgTab('tut'); }
