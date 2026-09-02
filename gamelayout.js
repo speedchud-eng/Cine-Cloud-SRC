@@ -520,33 +520,34 @@ const G_DATA = [
     rr: { os: "Windows 11", cpu: "Intel Core i5-12600K", ram: "32 GB RAM", gpu: "RTX 3060" }
   },
   { 
-    id: '2', 
-    n: "Hollow Knight", 
-    dev: "Team Cherry", 
-    url: "https://www.raccoongame.com/wap/dist/#/platform/cloudgame/gamedetail?gid=2&name=Hollow%20Knight", 
-    img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg", 
-    bg: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/library_hero.jpg", 
-    ach: 63, 
-    tags: ["Metroidvania", "Action", "Indie", "Dark"],
-    desc: "Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes filled with challenging combat and deep secrets.",
-    rm: { os: "Windows 7", cpu: "Intel Core 2 Duo", ram: "4 GB RAM", gpu: "GeForce 9800GT" },
-    rr: { os: "Windows 10", cpu: "Intel Core i5", ram: "8 GB RAM", gpu: "GTX 560" }
-  }
-];
-  { 
-    id: '815', 
-    n: "Neon Abyss", 
-    dev: "Veewo Games", 
-    url: "https://www.raccoongame.com/wap/dist/#/platform/cloudgame/gamedetail?gid=815&name=Neon%20Abyss", 
-    img: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/788100/library_600x900.jpg", 
-    bg: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/788100/library_hero.jpg", 
-    ach: 30, 
-    tags: ["Roguelike", "Action", "Platformer", "Pixel Art"],
-    desc: "Dive into a frantic, run-and-gun roguelike where you run headlong into the Abyss as part of the 'Grim Squad'. Blast through evolving dungeons with unlimited synergies.",
-    rm: { os: "Windows 7", cpu: "Intel Core i5", ram: "4 GB RAM", gpu: "GTX 470" },
-    rr: { os: "Windows 10", cpu: "Intel Core i5", ram: "8 GB RAM", gpu: "GTX 760" }
+  const G_DATA = [
+  {
+    "id": "2",
+    "n": "Hollow Knight",
+    "dev": "Team Cherry",
+    "url": "https://www.raccoongame.com/wap/dist/#/platform/cloudgame/gamedetail?id=2&name=Hollow%20Knight",
+    "img": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/library_600x900.jpg",
+    "bg": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/library_hero.jpg",
+    "ach": 63,
+    "tags": ["Metroidvania", "Action", "Indie", "Dark"],
+    "desc": "Forge your own path in Hollow Knight! An epic action adventure through a vast ruined kingdom of insects and heroes filled with challenging combat and deep secrets.",
+    "rm": { "os": "Windows 7", "cpu": "Intel Core 2 Duo", "ram": "4 GB RAM", "gpu": "GeForce 9800GT" },
+    "rr": { "os": "Windows 10", "cpu": "Intel Core i5", "ram": "8 GB RAM", "gpu": "GTX 560" }
   },
-  { 
+  {
+    "id": "815",
+    "n": "Neon Abyss",
+    "dev": "Veewo Games",
+    "url": "https://www.raccoongame.com/wap/dist/#/platform/cloudgame/gamedetail?id=815&name=Neon%20Abyss",
+    "img": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/788100/library_600x900.jpg",
+    "bg": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/788100/library_hero.jpg",
+    "ach": 30,
+    "tags": ["Roguelike", "Action", "Platformer", "Pixel Art"],
+    "desc": "Dive into a frantic, run-and-gun roguelike where you run headlong into the Abyss as part of the 'Grim Squad'. Blast through evolving dungeons with unlimited synergies.",
+    "rm": { "os": "Windows 7", "cpu": "Intel Core i5", "ram": "4 GB RAM", "gpu": "GTX 470" },
+    "rr": { "os": "Windows 10", "cpu": "Intel Core i5", "ram": "8 GB RAM", "gpu": "GTX 760" }
+  },
+  {
     id: '723', 
     n: "Need for Speed: Payback", 
     dev: "Ghost Games", 
