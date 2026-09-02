@@ -270,7 +270,7 @@ body {
 
 .popup-wrap {
   position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-  display: flex; justify-content: center; align-items: center; z-index: 2000000;
+  display: flex; justify-content: center; align-items: center; z-index: 99999999;
   opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .popup-wrap.show { opacity: 1; visibility: visible; }
@@ -358,54 +358,51 @@ body {
 
 .gp-focus { outline: 3px solid #fff !important; box-shadow: 0 0 20px #fff !important; border-radius: inherit; }
 
-/* Mobile Controls Styling */
 #mobile-controls {
-  position: fixed; bottom: 80px; left: 0; width: 100%; height: 260px;
-  pointer-events: none; z-index: 10000001; display: none; touch-action: none;
+  position: fixed; bottom: 100px; left: 0; width: 100%; height: 220px;
+  pointer-events: none; z-index: 10000000001; display: none; touch-action: none;
 }
 #mobile-controls.active { display: block; pointer-events: auto; }
-
 #joystick-zone {
-  position: absolute; bottom: 30px; left: 30px; width: 140px; height: 140px;
-  border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px); touch-action: none;
+  position: absolute; bottom: 10px; left: 20px; width: 120px; height: 120px;
+  border-radius: 50%; background: rgba(255,255,255,0.08); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15); touch-action: none;
 }
 #joystick-knob {
-  position: absolute; width: 60px; height: 60px; border-radius: 50%;
-  background: rgba(255,255,255,0.3); border: 1px solid #fff; top: 50%; left: 50%;
-  transform: translate(-50%, -50%); pointer-events: none;
+  position: absolute; width: 50px; height: 50px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); top: 50%; left: 50%; transform: translate(-50%, -50%);
+  border: 1px solid rgba(255,255,255,0.3); pointer-events: none;
 }
 
 #face-buttons {
-  position: absolute; bottom: 30px; right: 30px; width: 160px; height: 160px;
+  position: absolute; bottom: 10px; right: 20px; width: 130px; height: 130px;
 }
 .face-btn {
-  position: absolute; width: 56px; height: 56px; border-radius: 50%;
+  position: absolute; width: 46px; height: 46px; border-radius: 50%;
   background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-  display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;
   color: #fff; touch-action: none;
 }
 .face-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
-.ps-triangle { top: 0; left: 52px; color: #6de3a5; }
-.ps-circle { top: 52px; right: 0; color: #ff6e6e; }
-.ps-cross { bottom: 0; left: 52px; color: #7ec8ff; }
-.ps-square { top: 52px; left: 0; color: #ff8fd6; }
+.ps-triangle { top: 0;   left: 42px; color: #6de3a5; }
+.ps-circle   { top: 42px; right: 0;  color: #ff6e6e; }
+.ps-cross    { bottom: 0; left: 42px; color: #7ec8ff; }
+.ps-square   { top: 42px; left: 0;   color: #ff8fd6; }
 
 #mobile-toggle-btn {
-  position: fixed; bottom: 20px; right: 20px; z-index: 10000002;
-  background: var(--glass); border: 1px solid var(--border);
-  width: 56px; height: 56px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-  font-size: 24px; color: #fff;
+  position: fixed; bottom: 20px; right: 20px; z-index: 10000000002;
+  background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border);
+  border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; font-size: 24px; color: #fff;
 }
 
 @media (max-width: 1024px) {
-  #app-wrap { padding: 40px 10px 120px 10px; }
+  #app-wrap { padding: 40px 10px 100px 10px; }
   .hero-cont { height: 220px; }
   .h-title { font-size: 28px; }
-  .m-grid { flex-direction: column; padding: 20px; gap: 0; }
-  .dock-wrap { width: 95%; }
-  .main-dock { justify-content: space-around; width: 100%; }
+  .m-grid { flex-direction: column; padding: 20px; }
+  .dock-wrap { bottom: 15px; width: 95%; }
+  .main-dock { width: 100%; justify-content: space-around; }
 }
 </style>
 </head>
@@ -414,11 +411,11 @@ body {
 <div style="position: fixed; top: 0; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 10px;">
   <div class="top-notch" onclick="tglV('h')" style="cursor: pointer;">
     <img src="https://freepngimg.com/convert-png/89656-icons-circle-computer-black-white-steam" alt="Logo">
-    <span>Singularity OS</span>
+    <span>Singularity by C.S</span>
   </div>
   <div class="top-notch" id="n-game" onclick="tglV('g')" style="display: none; background: rgba(255,255,255,0.15);">
     <span id="n-game-title" style="color: #fff;">Game</span>
-    <span onclick="clsGm(event)" style="margin-left: 8px; color: #ff4d4d; font-weight: bold; cursor:pointer;">×</span>
+    <span onclick="clsGm(event)" style="margin-left: 8px; color: #ff4d4d; font-weight: bold; font-size: 16px; cursor:pointer;">×</span>
   </div>
 </div>
 
@@ -431,23 +428,23 @@ body {
 <canvas id="bg-particles" style="position:fixed; inset:0; pointer-events:none; z-index:-1;"></canvas>
 
 <div id="app-wrap">
-  <!-- Home View -->
+
   <div id="v-cine" class="tab-view active">
     <div id="cine-content">
-      <div class="sec-head" style="margin-top:0;">Featured Experience</div>
+      <div class="sec-head" style="margin-top:0;">Continue Playing</div>
       <div class="hero-cont" id="hc-box">
         <img src="" id="hc-img" class="h-img">
         <div class="h-over">
-          <div class="h-tag" id="hc-tag">FEATURED</div>
-          <h1 class="h-title" id="hc-title">Welcome</h1>
+          <div class="h-tag" id="hc-tag">RESUME</div>
+          <h1 class="h-title" id="hc-title">...</h1>
           <div class="h-stat">
-            <span id="hc-time">Ready to play</span>
-            <span id="hc-dev">Singularity Cloud</span>
+            <span id="hc-time"></span>
+            <span id="hc-dev"></span>
           </div>
         </div>
       </div>
-      
-      <div class="sec-head">Recommended for You</div>
+
+      <div class="sec-head">Games We Recommend</div>
       <div class="marquee-wrap">
         <div class="marquee-track" id="g-recom-track"></div>
       </div>
@@ -460,334 +457,291 @@ body {
     </div>
   </div>
 
-  <!-- Library View -->
   <div id="v-lib" class="tab-view">
-    <div class="sec-head" style="margin-top:0;">All Games</div>
+    <div class="sec-head" style="margin-top:0;">Complete Library</div>
     <div class="lib-search-wrap">
-      <input type="text" id="lib-search" placeholder="Search your library..." onkeyup="filterLib()">
+      <input type="text" id="lib-search" placeholder="Search games..." onkeyup="filterLib()">
     </div>
     <div class="grid-v" id="g-lib"></div>
   </div>
 
-  <!-- Tutorial View -->
   <div id="v-tut" class="tab-view">
     <div class="tut-cnt">
-      <h1>Cloud Gaming Setup</h1>
-      <p>Follow these steps to connect your account.</p>
-      <video controls style="max-width:800px;"><source src="Tutorial.mp4" type="video/mp4"></video>
+      <h1 style="font-weight: 400; font-size: 42px; margin-bottom: 12px; letter-spacing:-1px;">Setup Guide</h1>
+      <p style="color: #888; margin-bottom: 40px; font-size: 15px;">Watch this video to ensure everything runs smoothly.</p>
+      <video controls><source src="Tutorial.mp4" type="video/mp4"></video>
       <br><br>
-      <button class="show-login-btn" id="login-trigger" onclick="openAuthTray()">Connect Raccoon Account</button>
+      <button class="show-login-btn" id="login-trigger" onclick="openAuthTray()">Log in to play</button>
       
       <div id="auth-success" style="display:none;">
         <div class="auth-success-box">
-            <h3>Account Linked</h3>
-            <p>You are now connected to the cloud servers.</p>
+            <h3>You're All Set!</h3>
+            <p>You're Logged In and ready.</p>
         </div>
       </div>
 
       <div id="frame-area">
-        <div class="f-box">
-          <h3>Link Account</h3>
-          <p style="font-size:13px; color:#aaa;">IMPORTANT: Use the button below to login in a new tab if the frame doesn't work.</p>
-          <a href="https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en" target="_blank" class="show-login-btn" style="background:#fff; color:#000;">Open Login in New Tab</a>
-          <iframe id="rac-frame" class="f-rac"></iframe>
-          <button class="verify-manual-btn" onclick="markAsLoggedIn()">Refresh Connection</button>
+        <div class="f-box" id="frame-wrapper">
+         <h3>Log in with Raccoon</h3>
+          <div style="margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+            <p style="color: #fff; font-size: 14px; font-weight: 600;">[BETA]: Click below to login in a new tab first.</p>
+            <a href="https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en" target="_blank" style="display: inline-block; padding: 10px 20px; background: #fff; color: #000; text-decoration: none; border-radius: 8px; font-weight: bold;">Open Login in New Tab</a>
+          </div>
+          <iframe id="rac-frame" class="f-rac" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+          <button class="verify-manual-btn" onclick="markAsLoggedIn()">I have successfully logged in</button>
+        </div>
+        <div class="f-box" id="mail-wrapper">
+          <h3>Need a temp email?</h3>
+          <iframe class="f-mail" src="https://tempmail.ing/"></iframe>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Settings View -->
   <div id="v-set" class="tab-view">
     <div class="sec-head" style="margin-top:0;">Settings</div>
     <div class="settings-box">
-      <h3>UI Themes</h3>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+      <h3 style="margin:0 0 15px 0; color:#fff;">Themes</h3>
+      <div style="display:flex; gap:15px; flex-wrap:wrap;">
         <div class="swatch-btn" style="background:#050505;" onclick="setTheme('dark')"></div>
         <div class="swatch-btn" style="background:#ff4d4d;" onclick="setTheme('figure')"></div>
         <div class="swatch-btn" style="background:#00d2ff;" onclick="setTheme('neon')"></div>
       </div>
-      <br>
-      <button id="music-toggle-btn" class="show-login-btn" onclick="toggleBGM()">Mute Background Music</button>
+      <h3 style="margin:40px 0 15px 0; color:#fff;">Audio</h3>
+      <button id="music-toggle-btn" class="show-login-btn" style="margin:0;" onclick="toggleBGM()">Mute Music</button>
     </div>
   </div>
+
 </div>
 
-<!-- Dock -->
 <div class="dock-wrap">
   <div class="main-dock">
+    <img src="https://freepngimg.com/convert-png/89656-icons-circle-computer-black-white-steam" class="d-logo">
+    <div class="d-sep"></div>
     <div class="d-btn active" id="b-cine" onclick="chgTab('cine')">Home</div>
     <div class="d-btn" id="b-lib" onclick="chgTab('lib')">Library</div>
-    <div class="d-btn" id="b-tut" onclick="chgTab('tut')">Cloud</div>
-    <div class="d-btn" id="b-set" onclick="chgTab('set')">System</div>
+    <div class="d-btn" id="b-tut" onclick="chgTab('tut')">Tutorial</div>
+    <div class="d-btn" id="b-set" onclick="chgTab('set')">Settings</div>
   </div>
   <div class="trk-widg" id="tk" onclick="tkAction()">
     <img src="" class="tw-img" id="tk-img">
     <div class="tw-txt">
       <small id="tk-lbl">Now Playing</small>
-      <strong id="tk-nm">Game Title</strong>
+      <strong id="tk-nm">...</strong>
     </div>
-    <button class="tw-btn" id="tk-btn">Action</button>
+    <button class="tw-btn" id="tk-btn">Launch</button>
   </div>
 </div>
 
-<!-- Mobile Toggle -->
-<div id="mobile-toggle-btn" onclick="toggleMobileControls()">🎮</div>
+<div id="mobile-toggle-btn" onclick="toggleMobileControls()">📱</div>
 <div id="mobile-controls">
   <div id="joystick-zone"><div id="joystick-knob"></div></div>
   <div id="face-buttons">
-    <div class="face-btn ps-triangle" id="btn-y">Y</div>
-    <div class="face-btn ps-circle" id="btn-b">B</div>
-    <div class="face-btn ps-cross" id="btn-a">A</div>
-    <div class="face-btn ps-square" id="btn-x">X</div>
+    <div class="face-btn ps-triangle" id="btn-y">▲</div>
+    <div class="face-btn ps-circle" id="btn-b">●</div>
+    <div class="face-btn ps-cross" id="btn-a">✕</div>
+    <div class="face-btn ps-square" id="btn-x">■</div>
   </div>
 </div>
 
-<!-- Game Modal -->
 <div id="modal-ui">
   <img src="" class="m-bg" id="mdl-bg">
   <div class="m-close"><div class="m-close-btn" onclick="clsMdl()">×</div></div>
   <div class="m-grid">
     <div class="m-l">
       <img src="" id="mdl-post">
-      <button class="m-play" onclick="launchGame()">PLAY NOW</button>
+      <button class="m-play" onclick="try2launch()">Play Game</button>
       <div class="m-stats">
         <div class="m-rw"><small>Total Playtime</small><span id="mdl-tm">0m</span></div>
       </div>
     </div>
     <div class="m-r">
-      <h1 class="m-t" id="mdl-t">Game Title</h1>
-      <div class="m-desc" id="mdl-dc">Loading description...</div>
+      <h1 class="m-t" id="mdl-t">...</h1>
+      <div class="m-desc" id="mdl-dc">...</div>
       <div class="m-tgs" id="mdl-tg"></div>
     </div>
   </div>
 </div>
 
-<!-- Game Layer -->
-<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:90000;">
-    <div id="loader-screen" style="position:absolute; inset:0; background:#000; z-index:90002; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff;">
-        <h2>Connecting to Cloud...</h2>
-        <p style="color:#666;">Account authorization required</p>
-    </div>
-    <iframe id="gF" allow="autoplay;fullscreen;pointer-lock;gamepad" style="width:100%; height:100%; border:none;"></iframe>
+<div id="game-layer" style="display:none; position:fixed; inset:0; background:#000; z-index:900000;">
+  <div id="bS" style="position:absolute; inset:0; background:#000; z-index:90002; display:flex; justify-content:center; align-items:center; color:#fff;">
+    <h2 id="bS-t">Loading Cloud Server...</h2>
+  </div>
+  <iframe id="gF" allow="autoplay;fullscreen;pointer-lock;gamepad" style="width:100%; height:100%; border:none;"></iframe>
 </div>
 
 <script src="./gamelayout.js"></script>
 <script>
-// --- Core Systems ---
+// --- CORE LOGIC ---
 let lsDB = JSON.parse(localStorage.getItem('singularity_store_v10') || '{}');
 function sLS() { localStorage.setItem('singularity_store_v10', JSON.stringify(lsDB)); }
 let isAuth = localStorage.getItem('singularity_authed') === 'true';
 let cxG = null;
-let gmInterval = null;
+let gInt = null;
 
-// --- Tab System ---
+// --- DOCK & TABS ---
 function chgTab(v) {
-  document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-view').forEach(s => s.classList.remove('active'));
-  document.getElementById('b-' + v).classList.add('active');
-  document.getElementById('v-' + v).classList.add('active');
+    document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-view').forEach(s => s.classList.remove('active'));
+    document.getElementById('b-' + v).classList.add('active');
+    document.getElementById('v-' + v).classList.add('active');
 }
 
-// --- Auth System ---
+// --- AUTH ---
 function openAuthTray() {
-  document.getElementById('frame-area').classList.add('show');
-  document.getElementById('rac-frame').src = "https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en";
+    document.getElementById('frame-area').classList.add('show');
+    document.getElementById('rac-frame').src = "https://www.raccoongame.com/login?redirect_uri=https%3A%2F%2Fwww.raccoongame.com%2Fwap%2Fdist%2F%23%2Fplatform%2Fset&lang=en";
 }
 function markAsLoggedIn() {
-  isAuth = true;
-  localStorage.setItem('singularity_authed', 'true');
-  document.getElementById('auth-success').style.display = 'block';
-  document.getElementById('login-trigger').style.display = 'none';
-  document.getElementById('frame-area').classList.remove('show');
+    isAuth = true;
+    localStorage.setItem('singularity_authed', 'true');
+    document.getElementById('auth-success').style.display = 'block';
+    document.getElementById('login-trigger').style.display = 'none';
+    document.getElementById('frame-area').classList.remove('show');
 }
 
-// --- Layout & Library ---
-function dodeLayout() {
-  if (typeof G_DATA === 'undefined') return;
-  const lib = document.getElementById('g-lib');
-  lib.innerHTML = G_DATA.map(g => `
-    <div class="c-v" onclick="opMdl('${g.id}')">
-      <img src="${g.img}">
-      <div class="c-inf"><h3>${g.n}</h3><span>${g.dev}</span></div>
-    </div>
-  `).join('');
-  
-  const hero = G_DATA[Math.floor(Math.random()*G_DATA.length)];
-  document.getElementById('hc-img').src = hero.bg;
-  document.getElementById('hc-title').innerText = hero.n;
-  document.getElementById('hc-box').onclick = () => opMdl(hero.id);
-}
-
-// --- Game Modal & Launching ---
+// --- GAMES ---
 function opMdl(id) {
-  cxG = G_DATA.find(x => x.id === id);
-  if (!cxG) return;
-  document.getElementById('mdl-bg').src = cxG.bg;
-  document.getElementById('mdl-post').src = cxG.img;
-  document.getElementById('mdl-t').innerText = cxG.n;
-  document.getElementById('mdl-dc').innerText = cxG.desc;
-  document.getElementById('mdl-tm').innerText = (lsDB[id]?.t || 0) + "m";
-  
-  let m = document.getElementById('modal-ui');
-  m.style.display = 'block';
-  setTimeout(() => m.style.opacity = '1', 10);
+    cxG = G_DATA.find(x => x.id === id);
+    if (!cxG) return;
+    document.getElementById('mdl-bg').src = cxG.bg;
+    document.getElementById('mdl-post').src = cxG.img;
+    document.getElementById('mdl-t').innerText = cxG.n;
+    document.getElementById('mdl-dc').innerText = cxG.desc;
+    document.getElementById('mdl-tm').innerText = (lsDB[id]?.t || 0) + "m";
+    document.getElementById('modal-ui').style.display = 'block';
+    setTimeout(() => document.getElementById('modal-ui').style.opacity = '1', 10);
 }
-
 function clsMdl() {
-  let m = document.getElementById('modal-ui');
-  m.style.opacity = '0';
-  setTimeout(() => m.style.display = 'none', 400);
+    document.getElementById('modal-ui').style.opacity = '0';
+    setTimeout(() => document.getElementById('modal-ui').style.display = 'none', 400);
 }
 
-function launchGame() {
-  if (!isAuth) {
-    alert("Please go to 'Cloud' tab and login first.");
-    chgTab('tut');
-    clsMdl();
-    return;
-  }
-  
-  tglV('g');
-  const frame = document.getElementById('gF');
-  frame.src = cxG.url || cxG.path;
-  
-  document.getElementById('n-game-title').innerText = cxG.n;
-  document.getElementById('n-game').style.display = 'flex';
-  
-  // Track playtime
-  if (gmInterval) clearInterval(gmInterval);
-  if (!lsDB[cxG.id]) lsDB[cxG.id] = {t: 0, l: Date.now()};
-  gmInterval = setInterval(() => {
-    lsDB[cxG.id].t += 1;
-    sLS();
-  }, 60000);
-  
-  setTimeout(() => {
-    document.getElementById('loader-screen').style.display = 'none';
-  }, 3000);
-  clsMdl();
-}
-
-function tglV(v) {
-  const layer = document.getElementById('game-layer');
-  if (v === 'g') {
+function try2launch() {
+    if (!isAuth) {
+        alert("Please Login in the Tutorial tab first.");
+        chgTab('tut');
+        clsMdl();
+        return;
+    }
+    const layer = document.getElementById('game-layer');
+    const frame = document.getElementById('gF');
+    const loader = document.getElementById('bS');
+    
     layer.style.display = 'block';
-    document.getElementById('app-wrap').style.display = 'none';
-  } else {
-    layer.style.display = 'none';
-    document.getElementById('app-wrap').style.display = 'block';
-  }
+    loader.style.display = 'flex';
+    frame.src = cxG.url || cxG.path;
+    document.getElementById('n-game-title').innerText = cxG.n;
+    document.getElementById('n-game').style.display = 'flex';
+
+    setTimeout(() => { loader.style.display = 'none'; }, 4000);
+    clsMdl();
 }
 
 function clsGm(e) {
-  if(e) e.stopPropagation();
-  document.getElementById('gF').src = "";
-  document.getElementById('n-game').style.display = 'none';
-  if (gmInterval) clearInterval(gmInterval);
-  tglV('h');
+    if(e) e.stopPropagation();
+    document.getElementById('gF').src = "";
+    document.getElementById('n-game').style.display = 'none';
+    document.getElementById('game-layer').style.display = 'none';
 }
 
-// --- Mobile Controls & Joystick ---
-let joystickPos = { x: 0, y: 0 };
-let activeKeys = {};
+function tglV(v) {
+    if(v === 'h') clsGm();
+    else document.getElementById('game-layer').style.display = 'block';
+}
+
+// --- JOYSTICK BRAIN ---
+let joystickActive = false;
+let joystickData = { x: 0, y: 0 };
+let mobileControlsActive = false;
+let activeKeys = new Set();
 
 function toggleMobileControls() {
-  const ctrl = document.getElementById('mobile-controls');
-  const btn = document.getElementById('mobile-toggle-btn');
-  const isActive = ctrl.classList.toggle('active');
-  btn.style.background = isActive ? "#fff" : "rgba(22,22,25,0.6)";
-  btn.style.color = isActive ? "#000" : "#fff";
+    mobileControlsActive = !mobileControlsActive;
+    document.getElementById('mobile-controls').classList.toggle('active');
+    document.getElementById('mobile-toggle-btn').classList.toggle('active');
 }
 
 function setupJoystick() {
-  const zone = document.getElementById('joystick-zone');
-  const knob = document.getElementById('joystick-knob');
-  if (!zone) return;
+    const zone = document.getElementById('joystick-zone');
+    const knob = document.getElementById('joystick-knob');
+    if(!zone) return;
 
-  const handleMove = (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const rect = zone.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const maxDist = rect.width / 2;
-    
-    let dx = touch.clientX - centerX;
-    let dy = touch.clientY - centerY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    
-    if (dist > maxDist) {
-      dx *= maxDist / dist;
-      dy *= maxDist / dist;
-    }
-    
-    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-    joystickPos = { x: dx / maxDist, y: dy / maxDist };
-  };
+    const handleMove = (clientX, clientY) => {
+        const rect = zone.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const maxDist = rect.width / 2;
+        let dx = clientX - centerX;
+        let dy = clientY - centerY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist > maxDist) { dx *= maxDist / dist; dy *= maxDist / dist; }
+        knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        joystickData.x = dx / maxDist;
+        joystickData.y = dy / maxDist;
+    };
 
-  zone.addEventListener('touchstart', handleMove);
-  zone.addEventListener('touchmove', handleMove);
-  zone.addEventListener('touchend', () => {
-    knob.style.transform = 'translate(-50%, -50%)';
-    joystickPos = { x: 0, y: 0 };
-  });
+    zone.addEventListener('touchstart', (e) => { e.preventDefault(); joystickActive = true; handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchmove', (e) => { e.preventDefault(); if(joystickActive) handleMove(e.touches[0].clientX, e.touches[0].clientY); });
+    zone.addEventListener('touchend', () => { joystickActive = false; knob.style.transform = 'translate(-50%, -50%)'; joystickData = {x:0, y:0}; });
 }
 
-// Joystick Brain: Converts position to Arrow Keys
-function processJoystick() {
-  const threshold = 0.3;
-  const keys = {
-    ArrowUp: joystickPos.y < -threshold,
-    ArrowDown: joystickPos.y > threshold,
-    ArrowLeft: joystickPos.x < -threshold,
-    ArrowRight: joystickPos.x > threshold
-  };
-
-  for (let k in keys) {
-    if (keys[k] && !activeKeys[k]) {
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: k }));
-      activeKeys[k] = true;
-    } else if (!keys[k] && activeKeys[k]) {
-      document.dispatchEvent(new KeyboardEvent('keyup', { key: k }));
-      activeKeys[k] = false;
+// Polling loop to simulate keys
+function joystickLoop() {
+    if (mobileControlsActive) {
+        const threshold = 0.3;
+        const check = (key, condition) => {
+            if (condition && !activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keydown', { key: key, bubbles: true }));
+                activeKeys.add(key);
+            } else if (!condition && activeKeys.has(key)) {
+                document.dispatchEvent(new KeyboardEvent('keyup', { key: key, bubbles: true }));
+                activeKeys.delete(key);
+            }
+        };
+        check('ArrowUp', joystickData.y < -threshold);
+        check('ArrowDown', joystickData.y > threshold);
+        check('ArrowLeft', joystickData.x < -threshold);
+        check('ArrowRight', joystickData.x > threshold);
     }
-  }
-  requestAnimationFrame(processJoystick);
+    requestAnimationFrame(joystickLoop);
 }
 
-function setupFaceButtons() {
+// Face Buttons
+function setupButtons() {
     const map = {'btn-a':'Enter', 'btn-b':'Escape', 'btn-x':'x', 'btn-y':'y'};
     Object.keys(map).forEach(id => {
         const el = document.getElementById(id);
-        el.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            document.dispatchEvent(new KeyboardEvent('keydown', { key: map[id] }));
-        });
-        el.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            document.dispatchEvent(new KeyboardEvent('keyup', { key: map[id] }));
-        });
+        el.addEventListener('touchstart', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keydown', {key:map[id]})); });
+        el.addEventListener('touchend', (e) => { e.preventDefault(); document.dispatchEvent(new KeyboardEvent('keyup', {key:map[id]})); });
     });
 }
 
-// Initialization
+// --- INIT ---
 window.onload = () => {
-  document.getElementById('new-boot').style.opacity = '0';
-  setTimeout(() => document.getElementById('new-boot').style.display = 'none', 1000);
-  
-  let check = setInterval(() => {
-    if (typeof G_DATA !== 'undefined') {
-        clearInterval(check);
-        dodeLayout();
-    }
-  }, 100);
-
-  setupJoystick();
-  processJoystick();
-  setupFaceButtons();
-  if(isAuth) markAsLoggedIn();
+    setTimeout(() => { document.getElementById('new-boot').style.opacity = '0'; }, 2000);
+    setupJoystick();
+    joystickLoop();
+    setupButtons();
+    
+    let checkG = setInterval(() => {
+        if(typeof G_DATA !== 'undefined') {
+            clearInterval(checkG);
+            const lib = document.getElementById('g-lib');
+            lib.innerHTML = G_DATA.map(g => `<div class="c-v" onclick="opMdl('${g.id}')"><img src="${g.img}"><div class="c-inf"><h3>${g.n}</h3><span>${g.dev}</span></div></div>`).join('');
+            
+            const hero = G_DATA[0];
+            document.getElementById('hc-img').src = hero.bg;
+            document.getElementById('hc-title').innerText = hero.n;
+            document.getElementById('hc-box').onclick = () => opMdl(hero.id);
+        }
+    }, 100);
 };
+
+function setTheme(t) {
+    document.documentElement.style.setProperty('--accent', t === 'neon' ? '#00d2ff' : t === 'figure' ? '#ff4d4d' : '#fff');
+}
+function toggleBGM() { alert("Audio Engine Ready"); }
 </script>
 </body>
 </html>
