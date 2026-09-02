@@ -1110,36 +1110,6 @@ function rnLd() { // <-- THIS IS NOW CORRECT
   }, 2500);
   trStart(cxG.id);
 }
-
-function trStart(id) {
-  if (gInt) clearInterval(gInt);
-  gmId = id;
-  if (!lsDB[id]) lsDB[id] = { t: 0, l: Date.now() };
-  lsDB[id].l = Date.now();
-  sLS();
-  gSs = lsDB[id].t;
-  rfrTrk();
-  gInt = setInterval(() => {
-    if (gmWin && !gmWin.closed) {
-      gSs++;
-      if (gSs % 5 === 0) {
-        lsDB[id].t = gSs;
-        lsDB[id].l = Date.now();
-        sLS();
-      }
-    } else {
-      clearInterval(gInt);
-      lsDB[id].t = gSs;
-      lsDB[id].l = Date.now();
-      sLS();
-      gmWin = null;
-      gmId = null;
-      gInt = null;
-      rfrTrk();
-      dodeLayout();
-    }
-  }, 1000);
-}
 // ---------- JOYSTICK LOGIC ----------
 let joystickActive = false;
 let joystickData = { x: 0, y: 0 };
@@ -1474,12 +1444,6 @@ function opMdl(id) {
 function clsMdl() { let m = document.getElementById('modal-ui'); m.style.opacity = '0'; setTimeout(() => m.style.display = 'none', 500); evalBgMusic(); }
 
 let wAt = false; let dEn = 0; let tTr;
-function try2launch() {
-  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
-  if (gmWin && !gmWin.closed && !isMobile) { showPopup('p-sess-block'); return; }
-  if (isMobile) rnLd();
-  else { showPopup('p-tut-block'); wAt = true; }
-}
 
 function launchGame(mode) {
   hidePopup('p-launch-mode');
@@ -1492,11 +1456,6 @@ function launchGame(mode) {
     rnLd();
   }
 }
-function rnLd() {
-  if (!cxG) {
-    showToast('No game selected!');
-    return;
-  }
   clsMdl();
   let tU = cxG.url || cxG.path;
   let isM = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
@@ -1572,24 +1531,6 @@ window.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'z' || e.k
 let sessionPopUp = false, sTo = null, sTg = false;
 setInterval(() => { if (document.getElementById('game-layer').style.display === 'block') { try { let f = document.getElementById('gF'); if (f.contentWindow.location.href.includes('https://www.raccoongame.com/login')) { if (sessionPopUp && !sTg) { sTg = true; sTo = setTimeout(() => { document.getElementById('lO').style.display = 'flex'; if (document.exitPointerLock) document.exitPointerLock(); }, 10000); } } else { sTg = false; clearTimeout(sTo); } } catch (e) {} } else { sTg = false; clearTimeout(sTo); } }, 1500);
 
-function rnLd() {
-  clsMdl(); let tU = cxG.url || cxG.path;
-  let isM = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
-  if (isM) {
-    showToast("Please note: You will need to click play manually.");
-    let nw = window.open(tU, '_blank');
-    gmWin = { closed: false, close: function() { if (nw) nw.close(); clsGm(); } };
-    trStart(cxG.id);
-    return;
-  }
-  function try2launch() {
-  let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 1024;
-  if (gmWin && !gmWin.closed && !isMobile) { 
-    showPopup('p-sess-block'); 
-    return; 
-  }
-  rnLd();
-}
   document.getElementById('n-game-title').innerText = cxG.n; document.getElementById('n-game').style.display = 'flex';
   let f = document.getElementById('gF'), s = document.getElementById('bS'), bt = document.getElementById('bS-t'), lo = document.getElementById('lO');
   if (bt) bt.innerText = 'Loading ' + cxG.n + '...'; s.style.display = 'flex'; s.style.opacity = '1'; lo.style.display = 'none'; tglV('g');
