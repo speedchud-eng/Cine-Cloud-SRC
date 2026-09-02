@@ -777,17 +777,37 @@ body {
 <div id="mobile-toggle-btn" onclick="toggleMobileControls()" title="Toggle Mobile Controls">
   📱
 </div>
-
 <div id="mobile-controls">
   <div id="joystick-zone">
     <div id="joystick-knob"></div>
   </div>
-  <div id="action-buttons">
-    <div class="action-btn" id="btn-jump">🔼</div>
-    <div class="action-btn" id="btn-action">⏹</div>
+
+  <div id="dpad-zone">
+    <div class="dpad-btn dpad-up" id="dpad-up">▲</div>
+    <div class="dpad-btn dpad-down" id="dpad-down">▼</div>
+    <div class="dpad-btn dpad-left" id="dpad-left">◀</div>
+    <div class="dpad-btn dpad-right" id="dpad-right">▶</div>
+  </div>
+
+  <div id="face-buttons">
+    <div class="face-btn ps-triangle" id="btn-y">▲</div>
+    <div class="face-btn ps-circle" id="btn-b">●</div>
+    <div class="face-btn ps-cross" id="btn-a">✕</div>
+    <div class="face-btn ps-square" id="btn-x">■</div>
+  </div>
+
+  <div id="shoulder-buttons">
+    <div class="shoulder-btn" id="btn-lb">L1</div>
+    <div class="shoulder-btn" id="btn-lt">L2</div>
+    <div class="shoulder-btn" id="btn-rt">R2</div>
+    <div class="shoulder-btn" id="btn-rb">R1</div>
+  </div>
+
+  <div id="center-buttons">
+    <div class="center-btn" id="btn-select">≡</div>
+    <div class="center-btn" id="btn-start">☰</div>
   </div>
 </div>
-
 <div id="modal-ui">
   <img src="" class="m-bg" id="mdl-bg">
   <div class="m-close">
