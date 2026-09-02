@@ -519,8 +519,6 @@ const G_DATA = [
     rm: { os: "Windows 10", cpu: "Intel Core i7-4770K", ram: "16 GB RAM", gpu: "GTX 970" },
     rr: { os: "Windows 11", cpu: "Intel Core i5-12600K", ram: "32 GB RAM", gpu: "RTX 3060" }
   },
-  { 
-  const G_DATA = [
   {
     "id": "2",
     "n": "Hollow Knight",
