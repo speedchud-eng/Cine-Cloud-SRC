@@ -1505,5 +1505,19 @@ function aP() {
 function setParticles(t) { pType = t; localStorage.setItem('singularity_particles', t); iP(); document.querySelectorAll('.p-card').forEach(c => c.classList.remove('p-card-active')); let act = document.querySelector(`.card-${t}`); if (act) act.classList.add('p-card-active'); }
 
 </script>
+  <!-- Session Active Popup -->
+<div class="popup-wrap" id="p-sess-block" onclick="closePopupClick(event)">
+  <div class="popup-box">
+    <div class="popup-icon-container" style="background:rgba(255,77,77,0.1);border:1px solid rgba(255,77,77,0.2);">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff4d4d" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+    </div>
+    <h2>Session Active</h2>
+    <p>You're already playing a game! Make sure to exit your current session before starting a new one.</p>
+    <div class="popup-btn-row">
+      <button class="popup-btn primary" style="width: 100%;" onclick="hidePopup('p-sess-block')">Got it</button>
+    </div>
+  </div>
+</div>
+  
 </body>
 </html>
