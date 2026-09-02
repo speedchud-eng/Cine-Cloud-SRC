@@ -1446,30 +1446,7 @@ function launchGame(mode) {
     rnLd();
   }    
   }        
-  document.getElementById('n-game-title').innerText = cxG.n;
-  document.getElementById('n-game').style.display = 'flex';
-  let f = document.getElementById('gF'),
-    s = document.getElementById('bS'),
-    bt = document.getElementById('bS-t'),
-    lo = document.getElementById('lO');
-  if (bt) bt.innerText = 'Loading ' + cxG.n + '...';
-  s.style.display = 'flex';
-  s.style.opacity = '1';
-  lo.style.display = 'none';
-  tglV('g');
-  gmWin = { closed: false, close: function() { clsGm(); } };
-  setTimeout(() => {
-    f.src = tU;
-    setTimeout(() => {
-      if (s) {
-        s.style.opacity = '0';
-        setTimeout(() => s.style.display = 'none', 1000);
-      }
-    }, 1500);
-  }, 2500);
-  trStart(cxG.id);
-}
-window.addEventListener('keydown', (e) => {
+ window.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && wAt) {
     e.preventDefault(); dEn++; clearTimeout(tTr); tTr = setTimeout(() => dEn = 0, 500);
     if (dEn === 2) { hidePopup('p-tut-block'); wAt = false; dEn = 0; showPopup('p-launch-mode'); }
@@ -1511,13 +1488,7 @@ window.addEventListener('keyup', (e) => { if (e.key.toLowerCase() === 'z' || e.k
 let sessionPopUp = false, sTo = null, sTg = false;
 setInterval(() => { if (document.getElementById('game-layer').style.display === 'block') { try { let f = document.getElementById('gF'); if (f.contentWindow.location.href.includes('https://www.raccoongame.com/login')) { if (sessionPopUp && !sTg) { sTg = true; sTo = setTimeout(() => { document.getElementById('lO').style.display = 'flex'; if (document.exitPointerLock) document.exitPointerLock(); }, 10000); } } else { sTg = false; clearTimeout(sTo); } } catch (e) {} } else { sTg = false; clearTimeout(sTo); } }, 1500);
 
-  document.getElementById('n-game-title').innerText = cxG.n; document.getElementById('n-game').style.display = 'flex';
-  let f = document.getElementById('gF'), s = document.getElementById('bS'), bt = document.getElementById('bS-t'), lo = document.getElementById('lO');
-  if (bt) bt.innerText = 'Loading ' + cxG.n + '...'; s.style.display = 'flex'; s.style.opacity = '1'; lo.style.display = 'none'; tglV('g');
-  gmWin = { closed: false, close: function() { clsGm(); } }; setTimeout(() => { f.src = tU; setTimeout(() => { if (s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 1000); } }, 1500); }, 2500); trStart(cxG.id);
-}
-
-function trStart(id) {
+ function trStart(id) {
   if (gInt) clearInterval(gInt); gmId = id; if (!lsDB[id]) lsDB[id] = {t: 0, l: Date.now()}; lsDB[id].l = Date.now(); sLS(); gSs = lsDB[id].t; rfrTrk();
   gInt = setInterval(() => { if (gmWin && !gmWin.closed) { gSs++; if (gSs % 5 === 0) { lsDB[id].t = gSs; lsDB[id].l = Date.now(); sLS(); } } else { clearInterval(gInt); lsDB[id].t = gSs; lsDB[id].l = Date.now(); sLS(); gmWin = null; gmId = null; gInt = null; rfrTrk(); dodeLayout(); } }, 1000);
 }
